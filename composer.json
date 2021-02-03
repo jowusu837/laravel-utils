@@ -19,7 +19,9 @@
       "providers": [
         "TicketMiller\\Checkout\\CheckoutServiceProvider"
       ],
-      "aliases": {}
+      "aliases": {
+        "Checkout": "TicketMiller\\Checkout\\CheckoutFacade"
+      }
     }
   },
   "require": {
