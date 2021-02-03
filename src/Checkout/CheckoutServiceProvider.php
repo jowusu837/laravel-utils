@@ -7,6 +7,13 @@ use TicketMiller\Checkout\Drivers\PaystackCheckoutDriver;
 
 class CheckoutServiceProvider extends ServiceProvider
 {
+    /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = true;
+
     private $drivers = [
         'paystack' => PaystackCheckoutDriver::class,
 //        'rave' => RaveCheckoutService::class
@@ -40,7 +47,17 @@ class CheckoutServiceProvider extends ServiceProvider
      */
     private function getDriver(): string
     {
-        $id = config('checkout.driver');
+        $id = config('checkout.driver') ?? 'paystack';
         return $this->drivers[$id];
+    }
+
+    /**
+     * Get the services provided by this provider.
+     *
+     * @return array
+     */
+    public function provides(): array
+    {
+        return [ICheckoutDriver::class];
     }
 }
