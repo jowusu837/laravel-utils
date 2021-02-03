@@ -1,11 +1,13 @@
 <?php
 
 
-namespace TicketMiller\Checkout;
+namespace TicketMiller\Facades;
 
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
+use TicketMiller\Checkout\ICheckoutDriver;
+use TicketMiller\Checkout\Invoiceable;
 
 /**
  * Class CheckoutFacade
@@ -15,7 +17,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool handleCallback(Request $request, Invoiceable $invoiceable)
  * @method static string getProviderName()
  */
-class CheckoutFacade extends Facade
+class Checkout extends Facade
 {
     /**
      * Get the registered name of the component.

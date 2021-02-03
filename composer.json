@@ -20,7 +20,7 @@
         "TicketMiller\\Checkout\\CheckoutServiceProvider"
       ],
       "aliases": {
-        "Checkout": "TicketMiller\\Checkout\\CheckoutFacade"
+        "Checkout": "TicketMiller\\Facades\\Checkout"
       }
     }
   },
