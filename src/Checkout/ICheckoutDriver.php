@@ -4,9 +4,9 @@
 namespace TicketMiller\Checkout;
 
 
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
-interface ICheckoutService
+interface ICheckoutDriver
 {
     public function initiate(Invoiceable $invoiceable): string;
     public function handleCallback(Request $request, Invoiceable $invoiceable): bool;

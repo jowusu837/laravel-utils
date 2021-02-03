@@ -1,7 +1,7 @@
 <?php
 
 
-namespace TicketMiller\Checkout\Providers;
+namespace TicketMiller\Checkout\Drivers;
 
 
 use App\Invoice;
@@ -10,10 +10,10 @@ use App\RaveTransaction;
 use Exception;
 use Illuminate\Http\Request;
 use Throwable;
-use TicketMiller\Checkout\ICheckoutService;
+use TicketMiller\Checkout\ICheckoutDriver;
 use TicketMiller\Checkout\Invoiceable;
 
-class RaveCheckoutService implements ICheckoutService
+class RaveCheckoutDriver implements ICheckoutDriver
 {
     /**
      * @param Invoiceable $invoiceable

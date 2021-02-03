@@ -1,34 +1,46 @@
 <?php
 
 
-namespace TicketMiller\Checkout\Providers;
+namespace TicketMiller\Checkout\Drivers;
 
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
-use TicketMiller\Checkout\ICheckoutService;
+use TicketMiller\Checkout\ICheckoutDriver;
 use TicketMiller\Checkout\Invoiceable;
 
-class PaystackCheckoutService implements ICheckoutService
+class PaystackCheckoutDriver implements ICheckoutDriver
 {
     /**
      * @var Client
      */
     private $client;
 
+    /**
+     * @var array
+     */
+    private $config;
+
     public function __construct()
     {
+        $this->config = config('checkout.drivers.paystack');
         $this->client = new Client([
             'base_uri' => 'https://api.paystack.co',
-            'timeout' => config('checkout.paystack.timeout'),
+            'timeout' => $this->config['timeout'],
             'headers' => [
-                'Authorization' => 'Bearer ' . config('checkout.paystack.secretKey'),
+                'Authorization' => 'Bearer ' . $this->config['secretKey'],
                 'Cache-Control' => 'no-cache'
             ]
         ]);
     }
 
+    /**
+     * @param Invoiceable $invoiceable
+     * @return string
+     * @throws GuzzleException
+     */
     public function initiate(Invoiceable $invoiceable): string
     {
         $response = $this->client->request('post', '/transaction/initialize', [

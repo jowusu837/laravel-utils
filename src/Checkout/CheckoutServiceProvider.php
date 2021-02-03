@@ -3,12 +3,12 @@
 namespace TicketMiller\Checkout;
 
 use Illuminate\Support\ServiceProvider;
-use TicketMiller\Checkout\Providers\PaystackCheckoutService;
+use TicketMiller\Checkout\Drivers\PaystackCheckoutDriver;
 
 class CheckoutServiceProvider extends ServiceProvider
 {
-    private $services = [
-        'paystack' => PaystackCheckoutService::class,
+    private $drivers = [
+        'paystack' => PaystackCheckoutDriver::class,
 //        'rave' => RaveCheckoutService::class
     ];
 
@@ -19,8 +19,8 @@ class CheckoutServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $service = $this->getService();
-        $this->app->singleton(ICheckoutService::class, $service);
+        $service = $this->getDriver();
+        $this->app->singleton(ICheckoutDriver::class, $service);
     }
 
     /**
@@ -38,9 +38,9 @@ class CheckoutServiceProvider extends ServiceProvider
     /**
      * @return string
      */
-    private function getService(): string
+    private function getDriver(): string
     {
-        $id = env('CHECKOUT_SERVICE_PROVIDER', 'paystack');
-        return $this->services[$id];
+        $id = config('checkout.driver');
+        return $this->drivers[$id];
     }
 }

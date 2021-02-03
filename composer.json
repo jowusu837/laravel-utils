@@ -1,16 +1,12 @@
 {
-  "name": "ticketmiller/utils",
-  "description": "A set of utilities for developing ticketmiller applications",
+  "name": "ticketmiller/laravel-utils",
+  "description": "A set of utilities for developing laravel apps for TicketMiller",
   "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [
     {
       "name": "Victor J. Owusu",
       "email": "jowusu837@gmail.com"
-    },
-    {
-      "name": "Stephen Atuwo",
-      "email": "atuwostephen8@gmail.com"
     }
   ],
   "autoload": {
@@ -29,6 +25,7 @@
   "require": {
     "ext-json": "*",
     "guzzlehttp/guzzle": "6.*",
-    "illuminate/support": "5.7.*"
+    "illuminate/support": "5.7.*",
+    "illuminate/http": "5.7.*"
   }
 }
