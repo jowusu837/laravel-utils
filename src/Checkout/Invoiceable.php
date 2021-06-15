@@ -12,4 +12,5 @@ interface Invoiceable
     public function getCheckoutCallbackUrl(): string;
     public function saveCheckoutReference($reference): bool;
     public function getCheckoutReference(): string;
+    public function getCheckoutMeta(): array;
 }
