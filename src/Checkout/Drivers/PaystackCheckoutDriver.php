@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use TicketMiller\Checkout\ICheckoutDriver;
 use TicketMiller\Checkout\Invoiceable;
+use TicketMiller\Checkout\WebhookEvent;
 
 class PaystackCheckoutDriver implements ICheckoutDriver
 {
@@ -48,7 +49,8 @@ class PaystackCheckoutDriver implements ICheckoutDriver
                 'email' => $invoiceable->getEmailAddress(),
                 'amount' => $invoiceable->getAmount() * 100,
                 'currency' => $invoiceable->getCurrency(),
-                'callback_url' => $invoiceable->getCheckoutCallbackUrl()
+                'callback_url' => $invoiceable->getCheckoutCallbackUrl(),
+                'metadata' => json_encode($invoiceable->getCheckoutMeta())
             ]
         ]);
 
@@ -71,5 +73,30 @@ class PaystackCheckoutDriver implements ICheckoutDriver
     public function getProviderName(): string
     {
         return 'Paystack';
+    }
+
+    public function handleWebhook(Request $request): WebhookEvent
+    {
+        $signature = $request->header('x-paystack-signature');
+
+        // only a post with paystack signature header gets our attention
+        if (!$request->isMethod('post') || !$signature) {
+            return WebhookEvent::failed();
+        }
+
+        // Retrieve the request's body
+        $payload = $request->all();
+
+        $secretKey = $this->config['secretKey'];
+
+        // validate event do all at once to avoid timing attack
+        if ($signature !== hash_hmac('sha512', json_encode($payload), $secretKey)) {
+            return WebhookEvent::failed();
+        }
+
+        $event = WebhookEvent::successful();
+        $event->metadata = $payload['data']['metadata'];
+
+        return $event;
     }
 }
