@@ -81,6 +81,7 @@ class PaystackCheckoutDriver implements ICheckoutDriver
 
         // only a post with paystack signature header gets our attention
         if (!$request->isMethod('post') || !$signature) {
+            Log::debug("Webhook request must be post");
             return WebhookEvent::failed();
         }
 
@@ -91,6 +92,7 @@ class PaystackCheckoutDriver implements ICheckoutDriver
 
         // validate event do all at once to avoid timing attack
         if ($signature !== hash_hmac('sha512', json_encode($payload), $secretKey)) {
+            Log::debug("Invalid webhook signature!");
             return WebhookEvent::failed();
         }
 
